@@ -129,3 +129,75 @@ header.site img.logo { object-fit: contain; }
 .hero-img img { mix-blend-mode: normal; }
 .intro-card img { mix-blend-mode: normal; }
 .portrait-card { background-image: url(/trong-dong.png); background-size: 300px; background-position: center 30%; }
+
+/* ===== Trong dong: 1 mat trong lon lam nen the chan dung + trang tri hero ===== */
+.portrait-card { background-image: url(/trong-dong.png); background-size: cover; background-position: center; background-repeat: no-repeat; }
+.hero { position: relative; }
+.hero::before { content: ''; position: absolute; right: -140px; top: 50%; transform: translateY(-50%); width: 600px; height: 600px; background: url(/trong-dong.png) center / contain no-repeat; opacity: .38; pointer-events: none; }
+.hero-in { position: relative; z-index: 1; }
+@media (max-width: 900px) { .hero::before { right: -200px; width: 440px; height: 440px; opacity: .3; } }
+
+/* ===== Trong dong 50%: giu nguyen mau goc, phu tran the, lam noi chu the ===== */
+.portrait-card { background-image: none; position: relative; }
+.portrait-card::before { content: ''; position: absolute; inset: -14px; background: url(/trong-dong.png) center / cover no-repeat; opacity: .5; filter: blur(1.2px); pointer-events: none; }
+.portrait-card h3, .portrait-card .pimg { position: relative; z-index: 1; }
+.hero::before { opacity: .5; }
+@media (max-width: 900px) { .hero::before { opacity: .45; } }
+
+/* ===== MOBILE FIX: toi uu hien thi tren dien thoai ===== */
+body { overflow-x: clip; }
+.article-body img, .article-body video { max-width: 100%; height: auto; }
+.article-body iframe { max-width: 100%; }
+.article-body table { display: block; overflow-x: auto; max-width: 100%; }
+.article-body { overflow-wrap: break-word; }
+
+@media (max-width: 900px) {
+  .header-in { gap: 10px; padding: 10px 0; }
+  header.site img.logo { width: 60px; height: 60px; }
+  .school-name { font-size: 19px; letter-spacing: 0; }
+  .school-sub { font-size: 14px; letter-spacing: .3px; margin-top: 3px; }
+  .hero-in { padding: 20px 0 6px; gap: 14px; }
+  .hero-txt h1 { font-size: clamp(38px, 11vw, 56px); }
+  .titles .eyebrow { font-size: clamp(21px, 6vw, 30px); }
+  .hero-img img { max-height: 300px; }
+  .hero-btns { justify-content: center; }
+  .sec { padding: 22px 0 2px; }
+  .sec h2, .quick h2 { font-size: 20px; }
+  .news { gap: 16px; margin-top: 14px; }
+  .portrait-card { width: 100%; max-width: 430px; margin: 0 auto; }
+  .grid2 { gap: 14px; }
+  .feat .ph-lg { height: 200px; }
+  .fgrid { gap: 20px; }
+  .flogo img { width: 96px; height: 96px; }
+  .article-page h1 { font-size: 24px; }
+  .article-page blockquote { font-size: 16.5px; padding: 14px 16px; }
+  input, select, textarea { font-size: 16px; }
+}
+
+@media (max-width: 560px) {
+  .wrap { padding: 0 12px; }
+  .topbar .wrap { justify-content: center; }
+  header.site img.logo { width: 52px; height: 52px; }
+  .school-name { font-size: 16.5px; }
+  .school-sub { font-size: 12.5px; }
+  .hero-txt p { font-size: 15px; }
+  .btn { padding: 11px 16px; font-size: 14px; }
+  #home-news-grid .thumb { width: 96px; height: 96px; }
+  #home-news-grid .item h4 { font-size: 15px; height: auto; min-height: 46px; }
+  .portrait-card .pimg { min-height: 340px; }
+  .banner { padding: 20px 16px; }
+  .thumb-r { width: 112px; height: 82px; }
+  .thumb-s { width: 96px; height: 72px; }
+  .item-s h4 { font-size: 14.5px; }
+  .card .ph { height: 140px; }
+  .login-wrap { margin: 22px auto; }
+}
+
+/* ===== MOBILE FIX 2: chong nhuom mau toi + tieu de header 1 dong ===== */
+:root { color-scheme: light; }
+@media (max-width: 560px) {
+  header.site img.logo { width: 48px; height: 48px; }
+  .school-name { font-size: 15.5px; white-space: nowrap; }
+  .school-sub { font-size: 12px; white-space: nowrap; }
+  .header-in { flex-wrap: nowrap; }
+}
