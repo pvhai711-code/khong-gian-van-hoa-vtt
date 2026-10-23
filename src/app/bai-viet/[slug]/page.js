@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPostBySlug, getRelatedPosts } from '../../../lib/data';
 import { formatTime, categoryHref } from '../../../lib/utils';
-import Cover from '../../../components/Cover';
 import { SmallItem } from '../../../components/PostCards';
 import ViewCounter from '../../../components/ViewCounter';
 
@@ -67,10 +66,6 @@ export default async function ArticlePage({ params }) {
           &nbsp;•&nbsp; Chuyên mục: {post.categories?.name || '—'}
         </div>
         {post.excerpt && <p className="d-lead">{post.excerpt}</p>}
-
-        <div className="detail-cover">
-          <Cover post={post} />
-        </div>
 
         {post.content ? (
           <div
