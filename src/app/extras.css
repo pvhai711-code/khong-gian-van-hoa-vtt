@@ -226,3 +226,10 @@ body { overflow-x: clip; }
 .feat-grid .feat { display: flex; flex-direction: column; }
 .feat-grid .feat .ph-lg { flex: 1 1 auto; min-height: 250px; height: auto; aspect-ratio: auto; }
 .feat-grid .small-list { justify-content: space-between; }
+
+/* ===== Bo cuc muc Bai noi bat theo trang mau: o trai co dinh vua phai, cot phai xep khit ===== */
+.feat-grid { align-items: start; }
+.feat-grid .feat { display: block; }
+.feat-grid .feat .ph-lg { flex: none; height: 260px; min-height: 0; aspect-ratio: auto; }
+.feat-grid .small-list { justify-content: flex-start; }
+@media (max-width: 900px) { .feat-grid .feat .ph-lg { height: 220px; } }
