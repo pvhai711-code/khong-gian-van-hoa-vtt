@@ -34,6 +34,11 @@ export default function PostForm({ initial = null }) {
   const [uploading, setUploading] = useState('');
   const [preview, setPreview] = useState(false);
   const bodyRef = useRef(null);
+  // Trạng thái khung cắt ảnh bìa (crop 16:9 ngay khi tải lên)
+  const [crop, setCrop] = useState(null);
+  const cropViewRef = useRef(null);
+  const cropDragRef = useRef(null);
+  const cropFileRef = useRef(null);
 
   const canPublish = role === 'admin' || role === 'editor';
 
@@ -158,19 +163,133 @@ export default function PostForm({ initial = null }) {
     return data.publicUrl;
   }
 
-  async function onCoverFile(e) {
+  // Chọn ảnh bìa từ máy -> mở khung cắt 16:9 trước khi tải lên
+  function onCoverFile(e) {
     const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setError('');
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      cropFileRef.current = file;
+      setCrop({
+        url,
+        natW: img.naturalWidth,
+        natH: img.naturalHeight,
+        zoom: 1,
+        x: 0,
+        y: 0,
+        ready: false,
+      });
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      setError('Không đọc được file ảnh này, thầy/cô chọn ảnh khác nhé.');
+    };
+    img.src = url;
+  }
+
+  function cropGeom() {
+    const vw = cropViewRef.current?.clientWidth || 640;
+    const vh = (vw * 9) / 16;
+    const base = Math.max(vw / crop.natW, vh / crop.natH);
+    return { vw, vh, base, scale: base * crop.zoom };
+  }
+
+  function clampCropOffset(x, y, scale, vw, vh) {
+    const w = crop.natW * scale;
+    const h = crop.natH * scale;
+    return {
+      x: Math.min(0, Math.max(vw - w, x)),
+      y: Math.min(0, Math.max(vh - h, y)),
+    };
+  }
+
+  // Căn ảnh vào giữa khung ngay khi khung cắt hiện ra
+  useEffect(() => {
+    if (crop && !crop.ready && cropViewRef.current) {
+      const { vw, vh, base } = cropGeom();
+      const w = crop.natW * base;
+      const h = crop.natH * base;
+      setCrop((c) => ({ ...c, ready: true, x: (vw - w) / 2, y: (vh - h) / 2 }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [crop]);
+
+  function onCropDown(e) {
+    cropDragRef.current = { px: e.clientX, py: e.clientY, x: crop.x, y: crop.y };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  }
+  function onCropMove(e) {
+    const d = cropDragRef.current;
+    if (!d || !crop) return;
+    const { vw, vh, scale } = cropGeom();
+    const cl = clampCropOffset(d.x + (e.clientX - d.px), d.y + (e.clientY - d.py), scale, vw, vh);
+    setCrop((c) => ({ ...c, ...cl }));
+  }
+  function onCropUp() {
+    cropDragRef.current = null;
+  }
+  function onCropZoom(v) {
+    const { vw, vh, base, scale } = cropGeom();
+    const newScale = base * v;
+    const cx = vw / 2;
+    const cy = vh / 2;
+    const nx = cx - (cx - crop.x) * (newScale / scale);
+    const ny = cy - (cy - crop.y) * (newScale / scale);
+    const cl = clampCropOffset(nx, ny, newScale, vw, vh);
+    setCrop((c) => ({ ...c, zoom: v, ...cl }));
+  }
+
+  function closeCrop() {
+    if (crop?.url) URL.revokeObjectURL(crop.url);
+    setCrop(null);
+    cropFileRef.current = null;
+  }
+
+  async function finishCoverUpload(file) {
     if (!file) return;
     setUploading('cover');
     setError('');
     try {
       const url = await uploadToStorage(file, 'images');
       setForm((f) => ({ ...f, cover_url: url }));
+      closeCrop();
     } catch (err) {
       setError('Tải ảnh bìa thất bại: ' + err.message);
     }
     setUploading('');
-    e.target.value = '';
+  }
+
+  // Cắt đúng phần đang thấy trong khung rồi tải lên
+  async function doCropUpload() {
+    if (!crop) return;
+    try {
+      const { scale } = cropGeom();
+      const vw = cropViewRef.current.clientWidth;
+      const vh = (vw * 9) / 16;
+      const sx = -crop.x / scale;
+      const sy = -crop.y / scale;
+      const sw = vw / scale;
+      const sh = vh / scale;
+      const outW = Math.min(1280, Math.max(320, Math.round(sw)));
+      const outH = Math.round((outW * 9) / 16);
+      const canvas = document.createElement('canvas');
+      canvas.width = outW;
+      canvas.height = outH;
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      img.src = crop.url;
+      await img.decode();
+      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
+      const blob = await new Promise((r) => canvas.toBlob(r, 'image/jpeg', 0.9));
+      if (!blob) throw new Error('Trình duyệt không tạo được ảnh đã cắt.');
+      const file = new File([blob], 'anh-bia-da-cat.jpg', { type: 'image/jpeg' });
+      await finishCoverUpload(file);
+    } catch (err) {
+      setError('Cắt ảnh thất bại: ' + err.message);
+    }
   }
 
   async function onInlineImage(e) {
@@ -296,6 +415,14 @@ export default function PostForm({ initial = null }) {
     statusOptions.unshift({ v: initial.status, t: `Giữ nguyên (${initial.status})` });
   }
 
+  const cropScale =
+    crop && crop.ready && cropViewRef.current
+      ? Math.max(
+          cropViewRef.current.clientWidth / crop.natW,
+          (cropViewRef.current.clientWidth * 9) / 16 / crop.natH
+        ) * crop.zoom
+      : 0;
+
   return (
     <form className="frm" onSubmit={onSubmit}>
       {error && <div className="alert alert-err">{error}</div>}
@@ -356,6 +483,69 @@ export default function PostForm({ initial = null }) {
           </div>
         </div>
       </div>
+
+      {crop && (
+        <div className="cropper">
+          <p className="crop-hint">
+            ✂ <b>Cắt ảnh bìa theo khung của web (tỉ lệ 16:9):</b> kéo ảnh để di
+            chuyển, trượt thanh phóng to để chọn phần đẹp nhất — phần nằm trong
+            khung là phần sẽ hiển thị ngoài trang.
+          </p>
+          <div
+            className="crop-view"
+            ref={cropViewRef}
+            onPointerDown={onCropDown}
+            onPointerMove={onCropMove}
+            onPointerUp={onCropUp}
+            onPointerLeave={onCropUp}
+          >
+            {crop.ready && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={crop.url}
+                alt="Ảnh bìa đang cắt"
+                draggable={false}
+                style={{
+                  width: crop.natW * cropScale,
+                  height: crop.natH * cropScale,
+                  left: crop.x,
+                  top: crop.y,
+                }}
+              />
+            )}
+          </div>
+          <div className="crop-ctrl">
+            <span>Phóng to:</span>
+            <input
+              type="range"
+              min="1"
+              max="3"
+              step="0.01"
+              value={crop.zoom}
+              onChange={(e) => onCropZoom(parseFloat(e.target.value))}
+            />
+            <button
+              type="button"
+              className="mini-btn"
+              onClick={doCropUpload}
+              disabled={uploading === 'cover'}
+            >
+              {uploading === 'cover' ? 'Đang tải...' : '✂ Cắt & dùng ảnh này'}
+            </button>
+            <button
+              type="button"
+              className="mini-btn"
+              onClick={() => finishCoverUpload(cropFileRef.current)}
+              disabled={uploading === 'cover'}
+            >
+              Dùng ảnh gốc
+            </button>
+            <button type="button" className="mini-btn" onClick={closeCrop}>
+              Hủy
+            </button>
+          </div>
+        </div>
+      )}
 
       <label>Link video (YouTube hoặc file .mp4 — không bắt buộc)</label>
       <input value={form.video_url} onChange={set('video_url')} placeholder="https://www.youtube.com/watch?v=..." />
