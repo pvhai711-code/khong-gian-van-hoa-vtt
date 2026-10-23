@@ -200,10 +200,13 @@ export default function PostForm({ initial = null }) {
   function clampCropOffset(x, y, scale, vw, vh) {
     const w = crop.natW * scale;
     const h = crop.natH * scale;
-    return {
-      x: Math.min(0, Math.max(vw - w, x)),
-      y: Math.min(0, Math.max(vh - h, y)),
-    };
+    // Ảnh lớn hơn khung: chỉ trượt trong phần dư ra. Ảnh nhỏ hơn khung
+    // (thu nhỏ để vừa trọn ảnh, ví dụ logo): giữ ảnh nằm hẳn trong khung.
+    const clampAxis = (v, disp, view) =>
+      disp <= view
+        ? Math.min(view - disp, Math.max(0, v))
+        : Math.min(0, Math.max(view - disp, v));
+    return { x: clampAxis(x, w, vw), y: clampAxis(y, h, vh) };
   }
 
   // Căn ảnh vào giữa khung ngay khi khung cắt hiện ra
@@ -268,13 +271,9 @@ export default function PostForm({ initial = null }) {
     try {
       const { scale } = cropGeom();
       const vw = cropViewRef.current.clientWidth;
-      const vh = (vw * 9) / 16;
-      const sx = -crop.x / scale;
-      const sy = -crop.y / scale;
-      const sw = vw / scale;
-      const sh = vh / scale;
-      const outW = Math.min(1280, Math.max(320, Math.round(sw)));
-      const outH = Math.round((outW * 9) / 16);
+      const outW = 1280;
+      const outH = 720;
+      const k = outW / vw;
       const canvas = document.createElement('canvas');
       canvas.width = outW;
       canvas.height = outH;
@@ -282,7 +281,20 @@ export default function PostForm({ initial = null }) {
       const img = new Image();
       img.src = crop.url;
       await img.decode();
-      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
+      // Đổ nền trắng trước: phần khung không có ảnh sẽ là nền trắng
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, outW, outH);
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        crop.natW,
+        crop.natH,
+        crop.x * k,
+        crop.y * k,
+        crop.natW * scale * k,
+        crop.natH * scale * k
+      );
       const blob = await new Promise((r) => canvas.toBlob(r, 'image/jpeg', 0.9));
       if (!blob) throw new Error('Trình duyệt không tạo được ảnh đã cắt.');
       const file = new File([blob], 'anh-bia-da-cat.jpg', { type: 'image/jpeg' });
@@ -488,8 +500,9 @@ export default function PostForm({ initial = null }) {
         <div className="cropper">
           <p className="crop-hint">
             ✂ <b>Cắt ảnh bìa theo khung của web (tỉ lệ 16:9):</b> kéo ảnh để di
-            chuyển, trượt thanh phóng to để chọn phần đẹp nhất — phần nằm trong
-            khung là phần sẽ hiển thị ngoài trang.
+            chuyển, trượt thanh để phóng to / thu nhỏ. Thu nhỏ để ảnh vừa trọn
+            trong khung (hợp với logo, ảnh dọc) — phần trống còn lại sẽ tự để
+            nền trắng.
           </p>
           <div
             className="crop-view"
@@ -515,10 +528,10 @@ export default function PostForm({ initial = null }) {
             )}
           </div>
           <div className="crop-ctrl">
-            <span>Phóng to:</span>
+            <span>Phóng to / thu nhỏ:</span>
             <input
               type="range"
-              min="1"
+              min="0.2"
               max="3"
               step="0.01"
               value={crop.zoom}
