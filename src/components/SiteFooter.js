@@ -47,10 +47,10 @@ export default function SiteFooter({ settings }) {
             </p>
             <p style={{ marginTop: 10 }}>
               <Link href="/">› Trang chủ</Link> &nbsp;&nbsp;
-              <a href="#lien-he">› Liên hệ</a>
+              <Link href="/lien-he">› Liên hệ</Link>
               <br />
-              <a href="#rss">› RSS</a> &nbsp;&nbsp;
-              <a href="#so-do">› Sơ đồ cổng thông tin</a>
+              <a href="/rss">› RSS</a> &nbsp;&nbsp;
+              <Link href="/so-do-trang">› Sơ đồ cổng thông tin</Link>
             </p>
           </div>
         </div>
