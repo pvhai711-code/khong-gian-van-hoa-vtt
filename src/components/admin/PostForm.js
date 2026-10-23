@@ -9,6 +9,10 @@ import { writeAudit } from '../../lib/audit';
 // Trình soạn bài viết: biểu mẫu + thanh công cụ định dạng cơ bản
 // (chèn thẻ HTML vào textarea) + xem trước trực tiếp.
 // Nội dung lưu ở dạng HTML trong cột posts.content.
+
+// Bảng màu nhanh cho nút Màu chữ / Màu nền trên thanh công cụ
+const TEXT_COLORS = ['#C0272D', '#A81C20', '#1E3A8A', '#166534', '#B45309', '#6D28D9', '#111111', '#6B7280'];
+const BG_COLORS = ['#FDE68A', '#FDF3D8', '#FEE2E2', '#DCFCE7', '#DBEAFE', '#E5E7EB'];
 export default function PostForm({ initial = null }) {
   const { supabase, user, profile, role } = useAdmin();
   const router = useRouter();
@@ -59,6 +63,64 @@ export default function PostForm({ initial = null }) {
       return next;
     });
   };
+
+  // Chèn HTML tại vị trí con trỏ (không kèm chữ thừa) — dùng cho ảnh/video
+  function insertHtml(html) {
+    const ta = bodyRef.current;
+    if (!ta) return;
+    const { selectionStart: s, selectionEnd: e, value } = ta;
+    const next = value.slice(0, s) + html + value.slice(e);
+    setForm((f) => ({ ...f, content: next }));
+    requestAnimationFrame(() => {
+      ta.focus();
+      const pos = s + html.length;
+      ta.setSelectionRange(pos, pos);
+    });
+  }
+
+  // Căn lề đoạn văn: bôi đen đoạn cần căn, hoặc đặt con trỏ trong đoạn rồi bấm.
+  // mode: left | center | right | justify (canh đều 2 biên như Ctrl+J trong Word)
+  function alignText(mode) {
+    const ta = bodyRef.current;
+    if (!ta) return;
+    const value = ta.value;
+    let s = ta.selectionStart;
+    let e = ta.selectionEnd;
+    if (s === e) {
+      s = value.lastIndexOf('\n', Math.max(0, s - 1)) + 1;
+      const nl = value.indexOf('\n', e);
+      e = nl === -1 ? value.length : nl;
+    }
+    const seg = value.slice(s, e).trim();
+    if (!seg) return;
+    const m = seg.match(/^<p([^>]*)>([\s\S]*)<\/p>$/i);
+    let inner = seg;
+    let extraAttrs = '';
+    if (m) {
+      inner = m[2];
+      extraAttrs = m[1].replace(/\s*style="[^"]*"/i, '');
+    }
+    const wrapped = `<p style="text-align: ${mode}"${extraAttrs}>${inner}</p>`;
+    const next = value.slice(0, s) + wrapped + value.slice(e);
+    setForm((f) => ({ ...f, content: next }));
+    requestAnimationFrame(() => {
+      ta.focus();
+      ta.setSelectionRange(s, s + wrapped.length);
+    });
+  }
+
+  // Đổi màu chữ / màu nền cho đoạn đang bôi đen
+  function spanStyle(prop, val) {
+    const ta = bodyRef.current;
+    if (!ta) return;
+    const { selectionStart: s, selectionEnd: e } = ta;
+    if (s === e) {
+      setError('Thầy/cô bôi đen đoạn chữ cần đổi màu trước, rồi mới bấm chọn màu.');
+      return;
+    }
+    setError('');
+    wrapTag(`<span style="${prop}: ${val}">`, '</span>');
+  }
 
   // Chèn thẻ HTML quanh đoạn đang chọn trong ô nội dung
   function wrapTag(before, after = '') {
@@ -118,9 +180,24 @@ export default function PostForm({ initial = null }) {
     setError('');
     try {
       const url = await uploadToStorage(file, 'images');
-      wrapTag(`<img src="${url}" alt="Ảnh minh họa">`, '');
+      insertHtml(`<img src="${url}" alt="Ảnh minh họa">`);
     } catch (err) {
       setError('Tải ảnh vào bài thất bại: ' + err.message);
+    }
+    setUploading('');
+    e.target.value = '';
+  }
+
+  async function onInlineVideo(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading('video');
+    setError('');
+    try {
+      const url = await uploadToStorage(file, 'videos');
+      insertHtml(`<video controls src="${url}" style="max-width:100%"></video>`);
+    } catch (err) {
+      setError('Tải video vào bài thất bại: ' + err.message);
     }
     setUploading('');
     e.target.value = '';
@@ -303,7 +380,7 @@ export default function PostForm({ initial = null }) {
           type="button"
           onClick={() => {
             const url = window.prompt('Nhập link ảnh (https://...)');
-            if (url) wrapTag(`<img src="${url}" alt="Ảnh minh họa">`, '');
+            if (url) insertHtml(`<img src="${url}" alt="Ảnh minh họa">`);
           }}
         >
           🖼 Ảnh theo link
@@ -311,6 +388,45 @@ export default function PostForm({ initial = null }) {
         <label className="mini-btn" style={{ cursor: 'pointer' }}>
           {uploading === 'inline' ? 'Đang tải...' : '⬆ Tải ảnh vào bài'}
           <input type="file" accept="image/*" hidden onChange={onInlineImage} />
+        </label>
+        <label className="mini-btn" style={{ cursor: 'pointer' }}>
+          {uploading === 'video' ? 'Đang tải...' : '⬆ Tải video vào bài'}
+          <input type="file" accept="video/*" hidden onChange={onInlineVideo} />
+        </label>
+        <span className="bar-label">Căn lề:</span>
+        <button type="button" title="Căn trái" onClick={() => alignText('left')}>⬅ Trái</button>
+        <button type="button" title="Căn giữa" onClick={() => alignText('center')}>↔ Giữa</button>
+        <button type="button" title="Căn phải" onClick={() => alignText('right')}>➡ Phải</button>
+        <button type="button" title="Canh đều 2 biên (như Ctrl+J trong Word)" onClick={() => alignText('justify')}>☰ Đều 2 biên</button>
+        <span className="bar-label">Màu chữ:</span>
+        {TEXT_COLORS.map((c) => (
+          <button
+            key={'tc' + c}
+            type="button"
+            className="sw"
+            style={{ backgroundColor: c }}
+            title={'Màu chữ ' + c}
+            onClick={() => spanStyle('color', c)}
+          />
+        ))}
+        <label className="color-lab" title="Chọn màu chữ tùy ý">
+          🎨 Chữ
+          <input type="color" defaultValue="#C0272D" onChange={(e) => spanStyle('color', e.target.value)} />
+        </label>
+        <span className="bar-label">Màu nền:</span>
+        {BG_COLORS.map((c) => (
+          <button
+            key={'bg' + c}
+            type="button"
+            className="sw"
+            style={{ backgroundColor: c }}
+            title={'Màu nền ' + c}
+            onClick={() => spanStyle('background-color', c)}
+          />
+        ))}
+        <label className="color-lab" title="Chọn màu nền tùy ý">
+          🎨 Nền
+          <input type="color" defaultValue="#FDE68A" onChange={(e) => spanStyle('background-color', e.target.value)} />
         </label>
         <button type="button" onClick={() => setPreview((v) => !v)}>
           {preview ? 'Ẩn xem trước' : '👁 Xem trước'}

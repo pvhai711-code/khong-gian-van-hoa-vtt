@@ -1,0 +1,211 @@
+/* extras.css — bổ sung cho website thật (ảnh bìa thật, khối thay thế khi
+   bài chưa có ảnh, nội dung bài viết, vài tiện ích Admin). */
+
+/* ===== Ảnh bìa thật trong các khối của bản thiết kế ===== */
+.card .ph, .feat .ph-lg, .thumb-r, .thumb-s { overflow: hidden; padding: 0; }
+.card .ph img, .feat .ph-lg img, .thumb-r img, .thumb-s img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.card .ph, .feat .ph-lg { position: relative; }
+
+/* ===== Khối thay thế khi bài viết chưa có ảnh bìa ===== */
+.cover-ph {
+  background:
+    radial-gradient(circle at 78% 18%, rgba(255, 201, 60, .45), transparent 55%),
+    linear-gradient(135deg, #F3D9A4 0%, #E8C98F 45%, #C0272D 160%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; color: #8a6d2f; text-align: center; padding: 10px;
+  width: 100%; height: 100%;
+}
+.cover-ph .star { font-size: 44px; line-height: 1; color: #C0272D; opacity: .85; }
+.cover-ph .cat { font-weight: 900; font-size: 12.5px; letter-spacing: .6px; text-transform: uppercase; }
+.cover-ph.round { border-radius: 50%; }
+.cover-ph.round .star { font-size: 52px; }
+.cover-ph.round .cat { font-size: 11px; padding: 0 14px; }
+.cover-ph.sm .star { font-size: 26px; }
+.cover-ph.sm .cat { font-size: 10px; }
+
+/* ===== Nội dung thân bài (HTML do Admin soạn) ===== */
+.article-body { font-size: 15.5px; }
+.article-body p { line-height: 1.75; margin-bottom: 14px; }
+.article-body h2 { font-size: 21px; margin: 20px 0 10px; color: var(--red-dark); }
+.article-body h3 { font-size: 17.5px; margin: 16px 0 8px; }
+.article-body ul, .article-body ol { margin: 0 0 14px 22px; line-height: 1.75; }
+.article-body a { color: var(--red); font-weight: 700; }
+.article-body img { max-width: 100%; height: auto; border-radius: 10px; margin: 8px 0; }
+.article-body figure { margin: 14px 0; text-align: center; }
+.article-body figcaption { color: var(--grey); font-size: 13px; margin-top: 6px; font-style: italic; }
+.article-body blockquote {
+  background: var(--cream2); border-left: 5px solid var(--red);
+  padding: 16px 20px; font-size: 17px; font-weight: 700; color: var(--red-dark);
+  border-radius: 0 12px 12px 0; margin: 18px 0; line-height: 1.6;
+}
+.article-body table { border-collapse: collapse; margin: 12px 0; width: 100%; }
+.article-body td, .article-body th { border: 1px solid #e5e0d0; padding: 7px 10px; }
+.video-embed { position: relative; padding-top: 56.25%; border-radius: 12px; overflow: hidden; margin: 16px 0; background: #000; }
+.video-embed iframe, .video-embed video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* ===== Trang chi tiết ===== */
+.detail-cover { border-radius: 12px; overflow: hidden; height: 340px; margin-bottom: 18px; }
+.detail-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.d-views { color: var(--grey); font-size: 13.5px; }
+
+/* ===== Sidebar ===== */
+.side-box .mini-vid { display: block; border-radius: 9px; overflow: hidden; position: relative; height: 150px; }
+.side-box .mini-vid img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.side-box .mini-vid span {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 10px 8px;
+  background: linear-gradient(transparent, rgba(0,0,0,.72)); color: #fff;
+  font-size: 13px; font-weight: 700; line-height: 1.45;
+}
+.top7 li a:hover { color: var(--red-dark); text-decoration: underline; }
+.side-img { border-radius: 9px; overflow: hidden; height: 150px; display: block; }
+.side-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ===== Đăng nhập / Đăng ký ===== */
+.err.show { display: block; }
+.ok-box.show { display: block; }
+.login-links { margin-top: 16px; text-align: center; font-size: 13.5px; color: var(--grey); }
+.login-links a { color: var(--red); font-weight: 800; }
+
+/* ===== Admin: bổ sung ===== */
+.adm-main .frm { max-width: 860px; }
+.editor-bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+.editor-bar button {
+  border: 1.5px solid #ddd; background: #fff; border-radius: 8px;
+  padding: 5px 11px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+}
+.editor-bar button:hover { border-color: var(--red); color: var(--red-dark); }
+.editor-preview {
+  border: 1.5px solid #eee; border-radius: 10px; padding: 16px 18px; margin-top: 10px;
+  background: #fffef9;
+}
+.cover-row { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
+.cover-preview { width: 190px; height: 120px; border-radius: 10px; overflow: hidden; border: 1.5px solid #eee; flex: none; }
+.cover-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.filter-row .mini-btn.on { background: var(--red); color: #fff; }
+.media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; margin-top: 14px; }
+.media-cell { border: 1px solid #eee; border-radius: 11px; overflow: hidden; background: #fff; }
+.media-cell .mthumb { height: 110px; background: #f7f3e8; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.media-cell .mthumb img { width: 100%; height: 100%; object-fit: cover; }
+.media-cell .mthumb .vid { font-size: 30px; }
+.media-cell .minfo { padding: 8px 10px; font-size: 12px; color: var(--grey); word-break: break-all; }
+.media-cell .mact { padding: 0 10px 10px; display: flex; gap: 6px; flex-wrap: wrap; }
+.alert { border-radius: 10px; padding: 11px 15px; font-size: 14px; margin-bottom: 14px; line-height: 1.6; }
+.alert-ok { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; }
+.alert-err { background: #FDECEC; color: #8f1216; border: 1px solid #f3c2c2; }
+.alert-warn { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
+.temp-pass {
+  font-family: ui-monospace, Menlo, monospace; font-size: 17px; font-weight: 700;
+  background: #fff; border: 1.5px dashed #d9b96a; border-radius: 8px;
+  padding: 8px 12px; display: inline-block; margin: 6px 0;
+}
+.tbl input[type="text"], .tbl input[type="number"], .tbl select {
+  border: 1.5px solid #ddd; border-radius: 7px; padding: 6px 8px; font: inherit; font-size: 13.5px; width: 100%;
+}
+.tbl input[type="checkbox"] { width: 17px; height: 17px; }
+.btn-danger { border-color: #b91c1c; color: #b91c1c; }
+.btn-danger:hover { background: #b91c1c; }
+.spin { color: var(--grey); padding: 18px 0; }
+.adm-side a {
+  display: block; width: 100%; text-align: left; background: #fff; border: 0;
+  border-bottom: 1px solid #f2f2f2; padding: 12px 16px; font-size: 14.5px; font-weight: 600; cursor: pointer;
+}
+.adm-side a:hover, .adm-side a.on { background: #FDF0EE; color: var(--red-dark); }
+.adm-side button:disabled { color: #aaa; cursor: not-allowed; }
+select.role-sel, select.status-sel { border: 1.5px solid #ddd; border-radius: 7px; padding: 5px 7px; font: inherit; font-size: 13px; }
+
+/* Logo ở header là ảnh PNG trong suốt — giữ nền trắng của header */
+header.site img.logo { object-fit: contain; }
+.hero-img img { mix-blend-mode: multiply; }
+.portrait-card .pimg img { mix-blend-mode: multiply; }
+.intro-card img { mix-blend-mode: multiply; }
+
+/* ===== FIX (ban sua loi hien thi the chan dung): huy tron mau + khoa khung anh ===== */
+.portrait-card { overflow: hidden; }
+.portrait-card .pimg { position: relative; flex: 1 1 auto; min-height: 240px; border-radius: 8px; overflow: hidden; }
+.portrait-card .pimg img { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; border-radius: 0; object-fit: cover; object-position: top center; mix-blend-mode: normal; }
+.hero-img img { mix-blend-mode: normal; }
+.intro-card img { mix-blend-mode: normal; }
+.portrait-card { background-image: url(/trong-dong.png); background-size: 300px; background-position: center 30%; }
+
+/* ===== Trong dong: 1 mat trong lon lam nen the chan dung + trang tri hero ===== */
+.portrait-card { background-image: url(/trong-dong.png); background-size: cover; background-position: center; background-repeat: no-repeat; }
+.hero { position: relative; }
+.hero::before { content: ''; position: absolute; right: -140px; top: 50%; transform: translateY(-50%); width: 600px; height: 600px; background: url(/trong-dong.png) center / contain no-repeat; opacity: .38; pointer-events: none; }
+.hero-in { position: relative; z-index: 1; }
+@media (max-width: 900px) { .hero::before { right: -200px; width: 440px; height: 440px; opacity: .3; } }
+
+/* ===== Trong dong 50%: giu nguyen mau goc, phu tran the, lam noi chu the ===== */
+.portrait-card { background-image: none; position: relative; }
+.portrait-card::before { content: ''; position: absolute; inset: -14px; background: url(/trong-dong.png) center / cover no-repeat; opacity: .5; filter: blur(1.2px); pointer-events: none; }
+.portrait-card h3, .portrait-card .pimg { position: relative; z-index: 1; }
+.hero::before { opacity: .5; }
+@media (max-width: 900px) { .hero::before { opacity: .45; } }
+
+/* ===== MOBILE FIX: toi uu hien thi tren dien thoai ===== */
+body { overflow-x: clip; }
+.article-body img, .article-body video { max-width: 100%; height: auto; }
+.article-body iframe { max-width: 100%; }
+.article-body table { display: block; overflow-x: auto; max-width: 100%; }
+.article-body { overflow-wrap: break-word; }
+
+@media (max-width: 900px) {
+  .header-in { gap: 10px; padding: 10px 0; }
+  header.site img.logo { width: 60px; height: 60px; }
+  .school-name { font-size: 19px; letter-spacing: 0; }
+  .school-sub { font-size: 14px; letter-spacing: .3px; margin-top: 3px; }
+  .hero-in { padding: 20px 0 6px; gap: 14px; }
+  .hero-txt h1 { font-size: clamp(38px, 11vw, 56px); }
+  .titles .eyebrow { font-size: clamp(21px, 6vw, 30px); }
+  .hero-img img { max-height: 300px; }
+  .hero-btns { justify-content: center; }
+  .sec { padding: 22px 0 2px; }
+  .sec h2, .quick h2 { font-size: 20px; }
+  .news { gap: 16px; margin-top: 14px; }
+  .portrait-card { width: 100%; max-width: 430px; margin: 0 auto; }
+  .grid2 { gap: 14px; }
+  .feat .ph-lg { height: 200px; }
+  .fgrid { gap: 20px; }
+  .flogo img { width: 96px; height: 96px; }
+  .article-page h1 { font-size: 24px; }
+  .article-page blockquote { font-size: 16.5px; padding: 14px 16px; }
+  input, select, textarea { font-size: 16px; }
+}
+
+@media (max-width: 560px) {
+  .wrap { padding: 0 12px; }
+  .topbar .wrap { justify-content: center; }
+  header.site img.logo { width: 52px; height: 52px; }
+  .school-name { font-size: 16.5px; }
+  .school-sub { font-size: 12.5px; }
+  .hero-txt p { font-size: 15px; }
+  .btn { padding: 11px 16px; font-size: 14px; }
+  #home-news-grid .thumb { width: 96px; height: 96px; }
+  #home-news-grid .item h4 { font-size: 15px; height: auto; min-height: 46px; }
+  .portrait-card .pimg { min-height: 340px; }
+  .banner { padding: 20px 16px; }
+  .thumb-r { width: 112px; height: 82px; }
+  .thumb-s { width: 96px; height: 72px; }
+  .item-s h4 { font-size: 14.5px; }
+  .card .ph { height: 140px; }
+  .login-wrap { margin: 22px auto; }
+}
+
+/* ===== MOBILE FIX 2: chong nhuom mau toi + tieu de header 1 dong ===== */
+:root { color-scheme: light; }
+@media (max-width: 560px) {
+  header.site img.logo { width: 48px; height: 48px; }
+  .school-name { font-size: 15.5px; white-space: nowrap; }
+  .school-sub { font-size: 12px; white-space: nowrap; }
+  .header-in { flex-wrap: nowrap; }
+}
+
+/* ===== Trinh soan nang cap: can le + mau chu/mau nen ===== */
+.editor-bar .bar-label { font-weight: 700; font-size: 13px; color: var(--grey); align-self: center; margin-left: 8px; }
+.editor-bar .sw { width: 22px; height: 22px; min-width: 22px; border-radius: 6px; border: 1.5px solid rgba(0,0,0,.18); padding: 0; cursor: pointer; }
+.editor-bar .sw:hover { transform: scale(1.15); border-color: rgba(0,0,0,.4); }
+.editor-bar .color-lab { display: inline-flex; align-items: center; gap: 5px; border: 1.5px solid #ddd; background: #fff; border-radius: 8px; padding: 4px 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.editor-bar input[type="color"] { width: 26px; height: 22px; border: 0; padding: 0; background: none; cursor: pointer; }
+.article-body p { text-align: justify; }
