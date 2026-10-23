@@ -201,3 +201,22 @@ body { overflow-x: clip; }
   .school-sub { font-size: 12px; white-space: nowrap; }
   .header-in { flex-wrap: nowrap; }
 }
+
+/* ===== Trinh soan nang cap: can le + mau chu/mau nen ===== */
+.editor-bar .bar-label { font-weight: 700; font-size: 13px; color: var(--grey); align-self: center; margin-left: 8px; }
+.editor-bar .sw { width: 22px; height: 22px; min-width: 22px; border-radius: 6px; border: 1.5px solid rgba(0,0,0,.18); padding: 0; cursor: pointer; }
+.editor-bar .sw:hover { transform: scale(1.15); border-color: rgba(0,0,0,.4); }
+.editor-bar .color-lab { display: inline-flex; align-items: center; gap: 5px; border: 1.5px solid #ddd; background: #fff; border-radius: 8px; padding: 4px 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.editor-bar input[type="color"] { width: 26px; height: 22px; border: 0; padding: 0; background: none; cursor: pointer; }
+.article-body p { text-align: justify; }
+
+/* ===== Khung cat anh bia (crop 16:9) trong trinh soan ===== */
+.cropper { border: 1.5px dashed #d9b96a; border-radius: 12px; padding: 12px; margin: 8px 0 4px; background: #FFFDF5; }
+.crop-hint { font-size: 13px; color: var(--grey); margin-bottom: 8px; line-height: 1.55; }
+.crop-view { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 10px; background: #222; touch-action: none; cursor: grab; }
+.crop-view:active { cursor: grabbing; }
+.crop-view img { position: absolute; max-width: none; user-select: none; -webkit-user-drag: none; }
+.crop-ctrl { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; font-size: 13.5px; }
+.crop-ctrl input[type="range"] { flex: 1; min-width: 120px; }
+/* Khung anh lon (bai noi bat) dung ti le 16:9 de khop anh bia da cat */
+.feat .ph-lg { aspect-ratio: 16/9; height: auto; }
