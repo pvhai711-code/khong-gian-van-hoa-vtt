@@ -236,3 +236,6 @@ body { overflow-x: clip; }
 
 /* ===== Khung cat anh bia: nen trang (khop anh xuat ra khi thu nho vua khung) ===== */
 .crop-view { background: #fff; border: 1.5px solid #ddd; }
+
+/* ===== Khung anh the bai dung 16:9 — khop 100% khung cat trong Admin ===== */
+.card .ph { aspect-ratio: 16/9; height: auto; }
