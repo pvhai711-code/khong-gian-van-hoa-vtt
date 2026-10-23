@@ -39,7 +39,7 @@ export default async function HomePage() {
   const ideologyFeature = ideology.posts[0];
   const ideologyList = ideology.posts.slice(1, 5);
   const worldFeature = world.posts[0];
-  const worldList = world.posts.slice(1, 4);
+  const worldList = world.posts.slice(1, 5);
 
   return (
     <main>
