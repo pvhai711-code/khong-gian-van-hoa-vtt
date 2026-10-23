@@ -131,13 +131,8 @@ export default async function HomePage() {
             <CardItem key={post.id} post={post} />
           ))}
         </div>
-        {examples.posts.length === 0 ? (
+        {examples.posts.length === 0 && (
           <EmptyNote text="Chưa có bài gương điển hình." />
-        ) : (
-          <p className="note-line">
-            Gương điển hình là thầy cô, học sinh của Trường THPT Võ Trường
-            Toản sẽ được đăng tại mục này qua khu vực Admin.
-          </p>
         )}
       </section>
 
