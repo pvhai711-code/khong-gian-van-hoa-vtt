@@ -3,6 +3,7 @@ import {
   getPublishedPosts,
   getTopViewed,
   getVideoPosts,
+  getMediaItems,
   searchPosts,
   CATEGORY_SLUGS,
 } from '../../lib/data';
@@ -14,32 +15,47 @@ export const dynamic = 'force-dynamic';
 
 const PAGE_SIZE = 9;
 
-function Sidebar({ topViewed, videoPosts }) {
+async function Sidebar({ topViewed, videoPosts }) {
   const video = videoPosts[0];
+  const [photos, videos] = await Promise.all([
+    getMediaItems({ kind: 'image', limit: 1 }),
+    getMediaItems({ kind: 'video', limit: 1 }),
+  ]);
+  const latestPhoto = photos[0] || null;
+  const latestVideo = videos[0] || null;
   return (
     <aside className="side">
       <div className="side-box">
         <h3>Video</h3>
-        {video ? (
+        {latestVideo ? (
+          <video src={latestVideo.url} controls preload="metadata" />
+        ) : video ? (
           <Link className="mini-vid" href={`/bai-viet/${video.slug}`}>
             <Cover post={video} />
             <span>▶ {video.title}</span>
           </Link>
         ) : (
-          <div className="ph-s">
+          <Link className="ph-s" href="/thu-vien?loai=video">
             ▶ VIDEO GIỚI THIỆU
             <br />
             KHÔNG GIAN VĂN HÓA HỒ CHÍ MINH
-          </div>
+          </Link>
         )}
       </div>
       <div className="side-box">
         <h3>Ảnh</h3>
-        <div className="ph-s">
-          NHỮNG KHÔNG GIAN VĂN HÓA
-          <br />
-          HỒ CHÍ MINH NỔI BẬT
-        </div>
+        {latestPhoto ? (
+          <Link className="side-img" href="/thu-vien?loai=anh">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={latestPhoto.url} alt="Ảnh mới nhất trong thư viện" />
+          </Link>
+        ) : (
+          <Link className="ph-s" href="/thu-vien?loai=anh">
+            NHỮNG KHÔNG GIAN VĂN HÓA
+            <br />
+            HỒ CHÍ MINH NỔI BẬT
+          </Link>
+        )}
       </div>
       <FlipBookBox />
       <div className="side-box">
