@@ -26,13 +26,21 @@ export default function FlipBookBox() {
   return (
     <>
       <div className="side-box">
-        <h3>Sách lật</h3>
+        <h3>
+          SÁCH LẬT
+          <br />
+          KHÔNG GIAN VĂN HÓA HỒ CHÍ MINH
+        </h3>
         <button
           type="button"
           className="ph-s flip-tile"
           onClick={() => setOpen(true)}
         >
           📖 SÁCH LẬT
+          <br />
+          KHÔNG GIAN VĂN HÓA HỒ CHÍ MINH
+          <br />
+          THPT VÕ TRƯỜNG TOẢN
           <br />
           <span style={{ fontSize: 13, fontWeight: 500 }}>
             Bấm để xem sách ngay trên website
