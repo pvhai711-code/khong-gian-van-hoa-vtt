@@ -45,7 +45,14 @@ async function Sidebar({ topViewed, videoPosts }) {
       <div className="side-box">
         <h3>Ảnh</h3>
         {latestPhoto ? (
-          <Link className="side-img" href="/thu-vien?loai=anh">
+          <Link
+            className="side-img"
+            href={
+              latestPhoto.album_id
+                ? `/thu-vien?album=${latestPhoto.album_id}`
+                : '/thu-vien'
+            }
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={latestPhoto.url} alt="Ảnh mới nhất trong thư viện" />
           </Link>
