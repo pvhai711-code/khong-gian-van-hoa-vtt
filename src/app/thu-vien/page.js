@@ -118,10 +118,10 @@ export default async function ThuVienPage({ searchParams }) {
                   {item.kind === 'video' ? (
                     <video src={item.url} controls preload="metadata" />
                   ) : (
-                    <a href={item.url} target="_blank" rel="noreferrer">
+                    <Link href={`/thu-vien/${item.id}`}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={item.url} alt={item.caption || 'Ảnh'} />
-                    </a>
+                    </Link>
                   )}
                   <div className="gal-cap">
                     <b>{item.caption || (item.kind === 'video' ? 'Video' : 'Ảnh')}</b>
@@ -191,7 +191,7 @@ export default async function ThuVienPage({ searchParams }) {
                       <img src={cover.url} alt={a.title} />
                     </div>
                   ) : (
-                    <div className="album-cover album-cover-ph">🗂</div>
+                    <div className="album-cover album-cover-ph">📁</div>
                   )}
                   <div className="album-body">
                     <b>{a.title}</b>
