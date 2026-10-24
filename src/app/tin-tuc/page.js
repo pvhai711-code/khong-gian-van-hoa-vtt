@@ -8,6 +8,7 @@ import {
 } from '../../lib/data';
 import { FeaturePost, ListItem, Pager } from '../../components/PostCards';
 import Cover from '../../components/Cover';
+import FlipBookBox from '../../components/FlipBookBox';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,6 +41,7 @@ function Sidebar({ topViewed, videoPosts }) {
           HỒ CHÍ MINH NỔI BẬT
         </div>
       </div>
+      <FlipBookBox />
       <div className="side-box">
         <h3>Bài xem nhiều nhất</h3>
         {topViewed.length > 0 ? (
