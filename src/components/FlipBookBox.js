@@ -29,7 +29,7 @@ export default function FlipBookBox() {
         <h3>
           SÁCH LẬT
           <br />
-          KHÔNG GIAN VĂN HÓA HỒ CHÍ MINH
+          <span className="flip-h2">KHÔNG GIAN VĂN HÓA HỒ CHÍ MINH</span>
         </h3>
         <button
           type="button"
@@ -38,13 +38,11 @@ export default function FlipBookBox() {
         >
           📖 SÁCH LẬT
           <br />
-          KHÔNG GIAN VĂN HÓA HỒ CHÍ MINH
+          <span className="flip-t2">KHÔNG GIAN VĂN HÓA HỒ CHÍ MINH</span>
           <br />
           THPT VÕ TRƯỜNG TOẢN
           <br />
-          <span style={{ fontSize: 13, fontWeight: 500 }}>
-            Bấm để xem sách ngay trên website
-          </span>
+          <span className="flip-cta">Bấm để xem sách ngay trên website</span>
         </button>
       </div>
 
