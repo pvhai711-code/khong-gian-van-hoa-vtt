@@ -26,7 +26,7 @@ export default function FlipBookBox() {
   return (
     <>
       <div className="side-box">
-        <h3>
+        <h3 className="flip-head">
           SÁCH LẬT
           <br />
           <span className="flip-h2">KHÔNG GIAN VĂN HÓA HỒ CHÍ MINH</span>
@@ -36,7 +36,7 @@ export default function FlipBookBox() {
           className="ph-s flip-tile"
           onClick={() => setOpen(true)}
         >
-          📖 SÁCH LẬT
+          SÁCH LẬT
           <br />
           <span className="flip-t2">KHÔNG GIAN VĂN HÓA HỒ CHÍ MINH</span>
           <br />
