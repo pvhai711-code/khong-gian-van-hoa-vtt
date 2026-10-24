@@ -290,3 +290,18 @@ a.ph-s { display: block; text-decoration: none; }
 .detail-intro { font-size: 16.5px; line-height: 1.75; margin-top: 16px; color: var(--ink); }
 .detail-meta { font-size: 13.5px; color: var(--grey); margin-top: 12px; }
 .album-desc { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* ===== Thu vien: trang muc su kien — chu to, gian rong, 2 anh/hang (ban-sua-21) ===== */
+.thu-vien-album .sec-head h2 { font-size: 28px; line-height: 1.5; }
+.album-desc-full { font-size: 17px; line-height: 1.95; color: var(--ink); }
+.thu-vien-album .filter-row { margin-top: 16px; }
+.thu-vien-album .mini-btn { font-size: 15px; padding: 9px 17px; }
+.album-back { font-size: 15.5px; }
+.thu-vien-album .gal-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 22px; }
+.thu-vien-album .gal-cell img, .thu-vien-album .gal-cell video { height: 320px; }
+.thu-vien-album .gal-cap { font-size: 15px; padding: 12px 14px; }
+@media (max-width: 640px) {
+  .thu-vien-album .gal-grid { grid-template-columns: 1fr; }
+  .thu-vien-album .gal-cell img, .thu-vien-album .gal-cell video { height: 240px; }
+  .thu-vien-album .sec-head h2 { font-size: 22px; }
+}
