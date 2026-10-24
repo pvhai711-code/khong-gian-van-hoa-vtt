@@ -249,3 +249,8 @@ body { overflow-x: clip; }
 .flip-modal-box iframe { flex: 1; width: 100%; border: 0; }
 .flip-modal-note { padding: 8px 16px 10px; font-size: 13px; color: var(--grey); }
 @media (max-width: 560px) { .flip-modal-box { height: 92vh; } }
+
+/* ===== Sach lat: moi dong vua dung 1 hang, dong keu goi mau do noi tren nen kem ===== */
+.flip-h2 { font-size: 13px; white-space: nowrap; }
+.flip-t2 { font-size: 12px; white-space: nowrap; }
+.flip-cta { font-size: 13px; font-weight: 700; color: #C0272D; white-space: nowrap; }
