@@ -254,3 +254,7 @@ body { overflow-x: clip; }
 .flip-h2 { font-size: 13px; white-space: nowrap; }
 .flip-t2 { font-size: 12px; white-space: nowrap; }
 .flip-cta { font-size: 13px; font-weight: 700; color: #C0272D; white-space: nowrap; }
+
+/* ===== Sach lat: tieu de va dong keu goi in dam het ===== */
+.flip-head { font-weight: 900; }
+.flip-cta { font-weight: 900; }
