@@ -68,7 +68,7 @@ export default async function ThuVienPage({ searchParams }) {
 
     return (
       <main>
-        <section className="sec wrap" style={{ paddingTop: 22 }}>
+        <section className="sec wrap thu-vien-album" style={{ paddingTop: 22 }}>
           <div className="crumb">
             <Link href="/">Trang chủ</Link> /{' '}
             <Link href="/thu-vien">Thư viện ảnh & video</Link> /{' '}
@@ -78,7 +78,7 @@ export default async function ThuVienPage({ searchParams }) {
             <h2>🗂 {current.title}</h2>
           </div>
           {current.description ? (
-            <p style={{ color: 'var(--grey)', fontSize: 14, marginTop: -6 }}>
+            <p className="album-desc-full" style={{ marginTop: -6 }}>
               {current.description}
             </p>
           ) : null}
@@ -102,7 +102,7 @@ export default async function ThuVienPage({ searchParams }) {
               Video
             </Link>
           </div>
-          <p style={{ marginTop: 14 }}>
+          <p className="album-back" style={{ marginTop: 14 }}>
             <Link href="/thu-vien">← Tất cả các mục sự kiện</Link>
           </p>
           {list.length === 0 ? (
