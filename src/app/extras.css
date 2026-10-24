@@ -284,3 +284,9 @@ a.ph-s { display: block; text-decoration: none; }
 .album-body b { font-size: 15.5px; line-height: 1.45; }
 .album-meta { margin-top: 5px; font-size: 13.5px; color: var(--grey); }
 .album-desc { margin-top: 5px; font-size: 13.5px; color: var(--grey); line-height: 1.5; }
+
+/* ===== Thu vien: trang chi tiet anh/video (ban-sua-20) ===== */
+.detail-media img, .detail-media video { width: 100%; height: auto; display: block; border-radius: 12px; border: 1.5px solid #eee; background: #000; }
+.detail-intro { font-size: 16.5px; line-height: 1.75; margin-top: 16px; color: var(--ink); }
+.detail-meta { font-size: 13.5px; color: var(--grey); margin-top: 12px; }
+.album-desc { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
