@@ -191,3 +191,41 @@ export async function getTimelineEvents() {
 }
 
 export { CATEGORY_SLUGS };
+
+// ---------- Thư viện ảnh & video (bảng media / media_albums) ----------
+// Lấy danh sách phần sự kiện (nếu thầy chưa chạy file media-albums.sql
+// thì trả về mảng rỗng, trang vẫn chạy bình thường).
+export async function getMediaAlbums() {
+  try {
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from('media_albums')
+      .select('*')
+      .order('event_date', { ascending: false, nullsFirst: false })
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
+  } catch {
+    return [];
+  }
+}
+
+// Lấy ảnh/video trong thư viện: lọc theo loại ('image' | 'video'),
+// theo phần sự kiện (albumId) hoặc lấy mới nhất (limit).
+export async function getMediaItems({ kind = null, albumId = null, limit = 60 } = {}) {
+  try {
+    const supabase = createClient();
+    let q = supabase
+      .from('media')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    if (kind) q = q.eq('kind', kind);
+    if (albumId) q = q.eq('album_id', albumId);
+    const { data, error } = await q;
+    if (error) throw error;
+    return data || [];
+  } catch {
+    return [];
+  }
+}
