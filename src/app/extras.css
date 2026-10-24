@@ -265,3 +265,12 @@ body { overflow-x: clip; }
 .flip-t2 { font-size: 12px; white-space: nowrap; font-weight: 900; }
 .flip-tile { display: block; width: 100%; border: 0; cursor: pointer; font: inherit; color: #8a6d2f; text-decoration: none; }
 .flip-cta { font-size: 13px; font-weight: 900; color: #C0272D; white-space: nowrap; }
+
+/* ===== Thu vien anh & video (trang cong khai) ===== */
+.gal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 18px; }
+.gal-cell { border: 1.5px solid #eee; border-radius: 12px; overflow: hidden; background: #fff; }
+.gal-cell img, .gal-cell video { width: 100%; height: 170px; object-fit: cover; display: block; background: #000; }
+.gal-cap { padding: 9px 12px; font-size: 13.5px; color: var(--grey); line-height: 1.5; }
+.gal-cap b { color: var(--ink); }
+a.ph-s { display: block; text-decoration: none; }
+.side-box video { width: 100%; border-radius: 9px; display: block; background: #000; }
