@@ -22,6 +22,7 @@ export default function MediaPage() {
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
   const [eventDate, setEventDate] = useState('');
+  const [capDraft, setCapDraft] = useState({}); // lời giới thiệu đang gõ, theo id tệp
 
   const selAlbum =
     typeof sel === 'number' ? albums.find((a) => a.id === sel) : null;
@@ -157,6 +158,20 @@ export default function MediaPage() {
     loadItems(sel);
   }
 
+  async function saveCaption(item) {
+    const text = (capDraft[item.id] ?? item.caption ?? '').trim();
+    const { error } = await supabase
+      .from('media')
+      .update({ caption: text || null })
+      .eq('id', item.id);
+    if (error) {
+      setErr('Lưu chú thích thất bại: ' + error.message);
+      return;
+    }
+    setMsg('Đã lưu lời giới thiệu cho ảnh.');
+    loadItems(sel);
+  }
+
   async function copyUrl(item) {
     try {
       await navigator.clipboard.writeText(item.url);
@@ -193,7 +208,9 @@ export default function MediaPage() {
       <p className="sub">
         Tải ảnh/video lên kho lưu trữ của website, chia theo từng phần sự
         kiện. Ảnh bìa khi đăng bài cũng tự được lưu vào đây. Bấm “Sao chép
-        link” để dùng ảnh ở nơi khác.
+        link” để dùng ảnh ở nơi khác. Gõ lời giới thiệu ngắn vào ô dưới mỗi
+        ảnh rồi bấm “Lưu chú thích” — lời này sẽ hiện ở trang chi tiết khi
+        người xem bấm vào ảnh.
       </p>
       {msg && <div className="alert alert-ok">{msg}</div>}
       {err && <div className="alert alert-err">{err}</div>}
@@ -356,6 +373,26 @@ export default function MediaPage() {
                 {formatTime(item.created_at)}
               </div>
               <div className="mact">
+                <input
+                  aria-label="Lời giới thiệu ngắn cho ảnh"
+                  placeholder="Lời giới thiệu ngắn cho ảnh..."
+                  value={capDraft[item.id] ?? item.caption ?? ''}
+                  onChange={(e) =>
+                    setCapDraft((d) => ({ ...d, [item.id]: e.target.value }))
+                  }
+                  style={{
+                    padding: '5px 7px',
+                    border: '1.5px solid #ddd',
+                    borderRadius: 7,
+                    font: 'inherit',
+                    fontSize: 13,
+                    width: '100%',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <button className="mini-btn" onClick={() => saveCaption(item)}>
+                  Lưu chú thích
+                </button>
                 <select
                   aria-label="Chuyển phần sự kiện"
                   value={item.album_id || ''}
