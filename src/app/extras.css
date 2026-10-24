@@ -239,3 +239,13 @@ body { overflow-x: clip; }
 
 /* ===== Khung anh the bai dung 16:9 — khop 100% khung cat trong Admin ===== */
 .card .ph { aspect-ratio: 16/9; height: auto; }
+
+/* ===== Sach lat (flipbook) tren trang Tin tuc ===== */
+.flip-tile { width: 100%; border: 0; cursor: pointer; font: inherit; color: inherit; }
+.flip-modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.flip-modal-box { background: #fff; border-radius: 14px; width: min(1100px, 96vw); height: min(88vh, 760px); display: flex; flex-direction: column; overflow: hidden; }
+.flip-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 16px; border-bottom: 1.5px solid #eee; flex-wrap: wrap; }
+.flip-modal-head span { display: flex; gap: 8px; }
+.flip-modal-box iframe { flex: 1; width: 100%; border: 0; }
+.flip-modal-note { padding: 8px 16px 10px; font-size: 13px; color: var(--grey); }
+@media (max-width: 560px) { .flip-modal-box { height: 92vh; } }
