@@ -258,3 +258,10 @@ body { overflow-x: clip; }
 /* ===== Sach lat: tieu de va dong keu goi in dam het ===== */
 .flip-head { font-weight: 900; }
 .flip-cta { font-weight: 900; }
+
+/* ===== Sach lat: tat ca cac dong in dam 900; o sach la link mo tab moi ===== */
+.flip-head { font-weight: 900; }
+.flip-h2 { font-size: 13px; white-space: nowrap; font-weight: 900; }
+.flip-t2 { font-size: 12px; white-space: nowrap; font-weight: 900; }
+.flip-tile { display: block; width: 100%; border: 0; cursor: pointer; font: inherit; color: #8a6d2f; text-decoration: none; }
+.flip-cta { font-size: 13px; font-weight: 900; color: #C0272D; white-space: nowrap; }
