@@ -306,34 +306,6 @@ a.ph-s { display: block; text-decoration: none; }
   .thu-vien-album .sec-head h2 { font-size: 22px; }
 }
 
-/* ===== MOBILE 9:16: toi uu dien thoai doc (ban-sua-22) ===== */
-@media (max-width: 560px) {
-  /* Hero: chu vua man hinh, mat trong dong mo di cho de doc */
-  .hero { overflow: hidden; }
-  .hero::before { width: 300px; height: 300px; right: -120px; opacity: .22; }
-  .hero-txt h1 { font-size: 34px; line-height: 1.15; }
-  .titles .eyebrow { font-size: 19px; }
-  .hero-txt p { font-size: 15px; }
-  .hero-img img { max-height: 240px; }
-  .hero-btns .btn { flex: 1 1 100%; text-align: center; }
-  /* TIN MOI: bo anh tron, anh chu nhat 16:9 rong het the, khong cat hinh */
-  #home-news-grid .item { flex-direction: column; gap: 10px; }
-  #home-news-grid .thumb { width: 100%; height: auto; aspect-ratio: 16/9; border-radius: 12px; }
-  #home-news-grid .item h4 { height: auto; font-size: 16px; }
-  /* The chan dung: hien tron nguoi, khong cat dau/chan */
-  .portrait-card .pimg { min-height: 300px; }
-  .portrait-card .pimg img { object-fit: contain; object-position: center bottom; }
-  /* The cac muc: anh to hon cho de xem tren dien thoai */
-  .card .ph { height: 180px; }
-  .feat .ph-lg { height: 200px; }
-  /* Footer xep 1 cot, khoang cach thoang */
-  .fgrid { gap: 26px; }
-  /* Tieu de muc vua man hinh */
-  .sec h2 { font-size: 19px; line-height: 1.35; }
-}
-
-/* ===== Sua loi .news khong xep 1 cot tren dien thoai (ban-sua-23) ===== */
-/* Nguyen nhan: trong globals.css, luat .news 2 cot cua ban V3.10 nam SAU luat mobile (<=900px) nen no thang the, khien dien thoai van chia 2 cot (the chan dung trai, tin phai, banner thanh dai hep). Khoi nay nam trong extras.css (nap sau globals.css) nen thang lai, tra .news ve 1 cot tren dien thoai. */
-@media (max-width: 900px) {
-  .news { grid-template-columns: 1fr; }
-}
+/* ===== Chan trang: cot ten truong — 3 hang lien he, hang dai chu nho lai (ban-sua-22) ===== */
+.foot-school .fs-line { white-space: nowrap; }
+.foot-school .fs-line-sm { font-size: 12.5px; }
