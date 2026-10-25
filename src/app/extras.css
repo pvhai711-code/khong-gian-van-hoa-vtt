@@ -331,3 +331,9 @@ a.ph-s { display: block; text-decoration: none; }
   /* Tieu de muc vua man hinh */
   .sec h2 { font-size: 19px; line-height: 1.35; }
 }
+
+/* ===== Sua loi .news khong xep 1 cot tren dien thoai (ban-sua-23) ===== */
+/* Nguyen nhan: trong globals.css, luat .news 2 cot cua ban V3.10 nam SAU luat mobile (<=900px) nen no thang the, khien dien thoai van chia 2 cot (the chan dung trai, tin phai, banner thanh dai hep). Khoi nay nam trong extras.css (nap sau globals.css) nen thang lai, tra .news ve 1 cot tren dien thoai. */
+@media (max-width: 900px) {
+  .news { grid-template-columns: 1fr; }
+}
