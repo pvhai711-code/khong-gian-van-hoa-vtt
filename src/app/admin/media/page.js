@@ -9,6 +9,9 @@ import { writeAudit } from '../../../lib/audit';
 // phần sự kiện (album). Mỗi sự kiện là một phần riêng: chọn phần rồi
 // tải tệp lên, tệp sẽ nằm trong phần đó. Tệp chưa xếp phần nào nằm ở
 // "Chưa phân loại" và có thể chuyển phần sau.
+// ban-sua-24: tệp > 6MB tải lên theo từng khúc 6MB (chuẩn TUS của
+// Supabase) thay vì một request dài — khúc nào rớt mạng thì tự tải
+// lại khúc đó, không phải tải lại từ đầu. Tệp nhỏ giữ nguyên cách cũ.
 export default function MediaPage() {
   const { supabase, user, isAdmin } = useAdmin();
   const [albums, setAlbums] = useState([]);
@@ -104,6 +107,108 @@ export default function MediaPage() {
     loadAlbums();
   }
 
+  // Tải tệp lớn lên kho theo từng khúc 6MB (chuẩn TUS của Supabase):
+  // mỗi khúc là một request ngắn, khúc nào rớt mạng thì tự tải lại
+  // khúc đó (tối đa 4 lần, chờ lâu dần), không phải tải lại từ đầu.
+  // Chỉ dùng cho tệp > 6MB; tệp nhỏ giữ nguyên cách tải cũ đã chạy ổn.
+  async function uploadLargeFile(bucket, path, file) {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const token = session?.access_token || anon;
+    const b64 = (s) => btoa(unescape(encodeURIComponent(s)));
+    const create = await fetch(`${base}/storage/v1/upload/resumable`, {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${token}`,
+        apikey: anon,
+        'Upload-Length': String(file.size),
+        'Upload-Metadata': `bucketName ${b64(bucket)},objectName ${b64(
+          path
+        )},contentType ${b64(file.type || 'application/octet-stream')}`,
+        'Tus-Resumable': '1.0.0',
+      },
+    });
+    if (!create.ok) {
+      const t = await create.text().catch(() => '');
+      throw new Error(
+        `Không khởi tạo được phiên tải lên (mã ${create.status}) ${t.slice(0, 120)}`
+      );
+    }
+    let url = create.headers.get('Location');
+    if (!url) throw new Error('Máy chủ không trả về địa chỉ tải lên.');
+    if (url.startsWith('/')) url = base + url;
+    const CHUNK = 6 * 1024 * 1024;
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    let offset = 0;
+    while (offset < file.size) {
+      const end = Math.min(offset + CHUNK, file.size);
+      const chunk = file.slice(offset, end);
+      let doneChunk = false;
+      let lastErr = null;
+      for (let attempt = 0; attempt < 4 && !doneChunk; attempt++) {
+        try {
+          const res = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+              authorization: `Bearer ${token}`,
+              apikey: anon,
+              'Content-Type': 'application/offset+octet-stream',
+              'Upload-Offset': String(offset),
+              'Tus-Resumable': '1.0.0',
+            },
+            body: chunk,
+          });
+          if (res.status === 204) {
+            const next = res.headers.get('Upload-Offset');
+            offset = next ? parseInt(next, 10) : end;
+            doneChunk = true;
+          } else {
+            // Máy chủ có thể đã nhận khúc này nhưng trả lời lỗi:
+            // hỏi lại vị trí thật rồi đi tiếp từ đó.
+            try {
+              const head = await fetch(url, {
+                method: 'HEAD',
+                headers: {
+                  authorization: `Bearer ${token}`,
+                  apikey: anon,
+                  'Tus-Resumable': '1.0.0',
+                },
+              });
+              const cur = head.headers.get('Upload-Offset');
+              if (head.ok && cur !== null && parseInt(cur, 10) > offset) {
+                offset = parseInt(cur, 10);
+                doneChunk = true;
+              } else {
+                lastErr = new Error(`Máy chủ trả mã ${res.status}`);
+                await sleep(1500 * (attempt + 1));
+              }
+            } catch {
+              lastErr = new Error(`Máy chủ trả mã ${res.status}`);
+              await sleep(1500 * (attempt + 1));
+            }
+          }
+        } catch (e3) {
+          lastErr = e3;
+          await sleep(1500 * (attempt + 1));
+        }
+      }
+      if (!doneChunk) {
+        const pct = Math.floor((offset / file.size) * 100);
+        throw new Error(
+          `Mất kết nối khi đang tải (đã lên được ${pct}%). Thầy bấm tải lại giúp em.`
+        );
+      }
+      setMsg(
+        `Đang tải lên “${file.name}”: ${Math.floor(
+          (offset / file.size) * 100
+        )}%`
+      );
+    }
+  }
+
   async function onUpload(e) {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
@@ -120,10 +225,15 @@ export default function MediaPage() {
           .replace(/[̀-ͯ]/g, '')
           .replace(/[^a-zA-Z0-9._-]+/g, '-');
         const path = `${Date.now()}-${safe}`;
-        const { error: upErr } = await supabase.storage
-          .from(bucket)
-          .upload(path, file);
-        if (upErr) throw upErr;
+        if (file.size > 6 * 1024 * 1024) {
+          setMsg(`Đang tải lên “${file.name}”: 0%`);
+          await uploadLargeFile(bucket, path, file);
+        } else {
+          const { error: upErr } = await supabase.storage
+            .from(bucket)
+            .upload(path, file);
+          if (upErr) throw upErr;
+        }
         const { data } = supabase.storage.from(bucket).getPublicUrl(path);
         const { error: insErr } = await supabase.from('media').insert({
           url: data.publicUrl,
