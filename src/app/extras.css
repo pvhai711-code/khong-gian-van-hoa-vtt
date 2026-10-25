@@ -309,3 +309,23 @@ a.ph-s { display: block; text-decoration: none; }
 /* ===== Chan trang: cot ten truong — 3 hang lien he, hang dai chu nho lai (ban-sua-22) ===== */
 .foot-school .fs-line { white-space: nowrap; }
 .foot-school .fs-line-sm { font-size: 12.5px; }
+
+/* ===== MOBILE: sua loi tran ngang trang chu (ban-sua-24) ===== */
+/* Nguyen nhan: luat .news{290px 1fr} (V3.10) nam SAU luat mobile nen thang the,
+   khien trang chu tren dien thoai van giu 2 cot: the chan dung 290px + cot tin
+   bi ep sat mep phai, banner do thanh dai hep, trang tran ngang. Luat duoi day
+   dung do dac hieu cao hon de khoi phuc xep chong 1 cot tren dien thoai. */
+@media (max-width: 900px) {
+  .sec .news { grid-template-columns: 1fr; }
+  .news > * { min-width: 0; }
+  #home-news-grid .item { min-width: 0; }
+  #home-news-grid .item > div:last-child { min-width: 0; }
+  .sec-head { flex-wrap: wrap; row-gap: 6px; }
+  .sec-head a { flex: none; }
+}
+@media (max-width: 560px) {
+  .foot-school .fs-line { white-space: normal; }
+}
+@media (max-width: 380px) {
+  .school-name, .school-sub { white-space: normal; }
+}
