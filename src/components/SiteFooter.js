@@ -18,10 +18,25 @@ export default function SiteFooter({ settings }) {
           </div>
           <div>
             <h4>Trường THPT Võ Trường Toản</h4>
-            <p>
-              Địa chỉ: {addr1}
+            <p className="foot-school">
+              <span className="fs-line">
+                Website:{' '}
+                <a
+                  href="https://thptvotruongtoan.hcm.edu.vn"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  thptvotruongtoan.hcm.edu.vn
+                </a>
+              </span>
               <br />
-              <span style={{ whiteSpace: 'nowrap' }}>{addr2}</span>
+              <span className="fs-line">
+                Page Trường: Trường THPT Võ Trường Toản
+              </span>
+              <br />
+              <span className="fs-line fs-line-sm">
+                Page Đảng bộ: Đảng bộ trường THPT Võ Trường Toản
+              </span>
             </p>
           </div>
           <div>
