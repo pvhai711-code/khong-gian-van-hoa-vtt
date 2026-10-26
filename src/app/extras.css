@@ -358,3 +358,18 @@ a.ph-s { display: block; text-decoration: none; }
   .item-s h4 { font-size: 16px; }
   .thumb-s { width: 132px; height: 96px; }
 }
+
+/* ===== Hero: cat 2 canh kem, dua trong dong ve duoi chan dung (ban-sua-30) ===== */
+/* Giu nguyen bo cuc ban-sua-29, chi sua khoi Hero: dai Hero von tran het man hinh
+   (section khong bi gioi han nhu cac muc .wrap) nen 2 ben thua dai kem. Thu hep dai
+   Hero ve dung chieu rong khung noi dung (1240px, 1440px tu man 1440px) nhu cac muc
+   ben duoi, 2 ben thua thanh nen trang. Dai Hero hep lai cung keo hinh trong dong
+   (dang dinh o mep phai dai) ve phia duoi chan dung Bac; chinh right ve -40px de
+   vong trong nam can giua sau lung chan dung thay vi lech sang mep phai. */
+.hero { max-width: 1240px; margin-left: auto; margin-right: auto; }
+@media (min-width: 1440px) {
+  .hero { max-width: 1440px; }
+}
+@media (min-width: 1024px) {
+  .hero::before { right: -40px; }
+}
