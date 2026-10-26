@@ -16,6 +16,9 @@ export const dynamic = 'force-dynamic';
 const MUSEUM_URL =
   'https://map3d.visithcmc.vn/?startscene=scene_bnr_view4';
 
+const FLIPBOOK_URL =
+  'https://heyzine.com/flip-book/437b823c6d.html#page/1';
+
 function EmptyNote({ text }) {
   return (
     <p className="note-line">
@@ -72,6 +75,14 @@ export default async function HomePage() {
                 rel="noopener noreferrer"
               >
                 Tham quan Bảo tàng 3D ↗
+              </a>
+              <a
+                className="btn btn-line"
+                href={FLIPBOOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Tham quan sách lật ↗
               </a>
             </div>
           </div>

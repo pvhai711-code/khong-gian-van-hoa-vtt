@@ -374,21 +374,17 @@ a.ph-s { display: block; text-decoration: none; }
   .hero::before { right: -40px; }
 }
 
-/* ===== Hero: tieu de dich phai, chan dung + trong dong dich trai (ban-sua-31) ===== */
-/* Tieu de dich phai 32px; chan dung dich trai 13vw (khoang 250px tren man lon) bang
-   transform nen khong pha bo cuc flex; trong dong dich trai theo dung chan dung bang
-   cong thuc right tinh tu vw (tam trong dong luon can giua sau lung chan dung o moi
-   co man hinh). Luu y: dich dung 1/3 khung (~480px) thi chan dung se de len chu nen
-   chi dich toi muc van ho chu khoang 60px; muon dich them phai thu nho chu tieu de. */
+/* ===== Hero: chan dung + trong dong dich sang phai (ban-sua-32) ===== */
+/* Huy lenh dich trai ban-sua-31: chan dung om sat mep phai khung noi dung (tam giua
+   chan dung o ~87% chieu rong dai Hero, dung cho duong ke do thay danh dau); trong
+   dong dat right -120px de tam luon can giua sau lung chan dung o moi co man hinh.
+   Tieu de giu nguyen muc dich phai 32px nhu ban truoc. */
 @media (min-width: 1280px) {
   .hero-txt { padding-left: 32px; }
-  .hero-img img { transform: translateX(-13vw); }
 }
-@media (min-width: 1280px) and (max-width: 1439px) {
-  .hero::before { right: calc(13vw - 62px); }
-}
-@media (min-width: 1440px) {
-  .hero::before { right: calc(13vw - 26px); }
+@media (min-width: 1024px) {
+  .hero-img { flex: 0 0 auto; text-align: right; }
+  .hero::before { right: -120px; }
 }
 
 /* ===== Header: cat 2 canh thua nhu Hero (ban-sua-31) ===== */
