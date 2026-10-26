@@ -1,21 +1,26 @@
 import Link from 'next/link';
 import { createClient } from '../lib/supabase/server';
-import { createAdminClient } from '../lib/supabase/admin';
 
 // Chân trang: cột logo + thông tin trường + liên hệ + thống kê truy cập.
 // Nội dung lấy từ bảng site_settings (Admin sửa được ở mục Cài đặt trang).
 // Riêng thống kê: Đang online = số phiên còn hoạt động trong 5 phút gần nhất,
-// Tổng = số khởi điểm thầy nhập trong Admin + số lượt đếm tự động. Nếu bảng
-// đếm chưa được tạo (chưa chạy SQL) thì hiện lại số thầy nhập tay như trước.
+// Tổng = số khởi điểm thầy nhập trong Admin + số lượt đếm tự động. Chỉ dùng khóa
+// anon để đọc bảng đếm (khóa service_role trên Vercel từng làm code cũ trả số 0
+// giả). Nếu không đọc được bảng (lỗi) thì trả null để footer hiện lại số thầy
+// nhập tay, thay vì hiện số 0 gây hiểu lầm.
 async function getLiveStats() {
   try {
-    const supabase = createAdminClient() || createClient();
+    const supabase = createClient();
     const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
-    const { count: online } = await supabase
+    const { count: online, error: countError } = await supabase
       .from('visitor_sessions')
       .select('*', { count: 'exact', head: true })
       .gt('last_seen', fiveMinAgo);
-    const { data } = await supabase.from('visitor_sessions').select('visits');
+    if (countError) return null;
+    const { data, error: visitsError } = await supabase
+      .from('visitor_sessions')
+      .select('visits');
+    if (visitsError) return null;
     const visits = (data || []).reduce((s, r) => s + (r.visits || 0), 0);
     return { online: online || 0, visits };
   } catch {
