@@ -329,3 +329,17 @@ a.ph-s { display: block; text-decoration: none; }
 @media (max-width: 380px) {
   .school-name, .school-sub { white-space: normal; }
 }
+
+/* ===== HERO full man hinh tren may tinh rong (ban-sua-26) ===== */
+/* Nguyen nhan khoang du 2 ben: noi dung Hero bi khung .wrap gioi han 1240px o giua,
+   nen man hinh cang rong thi 2 ben cang thua khoang kem. Tu 1280px tro len, cho Hero
+   tran het chieu rong man hinh: tieu de sat mep trai, chan dung sat mep phai,
+   chi chua lai 48px le moi ben; chan dung phong to hon cho can doi. */
+@media (min-width: 1280px) {
+  .hero .hero-in { max-width: none; padding: 28px 48px 8px; gap: 40px; }
+  .hero-txt { flex: 1 1 auto; }
+  .hero-txt p { max-width: 660px; font-size: 17.5px; }
+  .hero-img { flex: 0 0 auto; text-align: right; }
+  .hero-img img { max-height: 430px; }
+  .hero::before { right: -170px; opacity: .45; }
+}
