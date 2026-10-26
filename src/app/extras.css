@@ -330,20 +330,31 @@ a.ph-s { display: block; text-decoration: none; }
   .school-name, .school-sub { white-space: normal; }
 }
 
-/* ===== Keo gian toan trang tren man hinh rong, bo le trang 2 ben (ban-sua-28) ===== */
-/* Thay the ban-sua-27 (chi thu hep dai Hero): tu 1280px tro len, khung noi dung chung
-   .wrap khong gioi han 1240px nua ma tran het man hinh (chua 40px le moi ben), ap dung
-   cho Hero, cac muc trang chu, chuyen muc, tin tuc, thu vien va chan trang. Rieng trang
-   bai viet giu khung 860px cho de doc, khu vuc Admin giu toi da 1440px cho de thao tac.
-   Man hinh hep hon 1280px va dien thoai khong doi. */
-@media (min-width: 1280px) {
-  .wrap { max-width: none; padding-left: 40px; padding-right: 40px; }
-  .topbar .wrap { padding-left: 40px; padding-right: 40px; }
-  .hero .hero-in { padding: 28px 40px 8px; }
-  .hero-txt { flex: 1 1 auto; }
-  .hero-txt p { max-width: 660px; font-size: 17.5px; }
-  .hero-img { flex: 0 0 auto; text-align: right; }
-  .hero-img img { max-height: 430px; }
+/* ===== Bo cuc lai: ve khung giua, phong to can doi (ban-sua-29) ===== */
+/* Huy ban-sua-28 (keo gian full trang, nhin pho): tu 1440px tro len, khung noi dung
+   chi mo rong vua phai tu 1240px len 1440px va giu can giua; chu, hinh phong to theo
+   dung ti le (~13-15%) va cac muc cao hon, khoang cach thoang hon — khong keo gian
+   khung roi de khoang trong lon trong muc. Trang bai viet giu khung 860px nhu cu. */
+@media (min-width: 1440px) {
+  .wrap { max-width: 1440px; }
   .article-page { max-width: 860px; }
-  .adm { max-width: 1440px; margin-left: auto; margin-right: auto; }
+  .sec { padding: 36px 0 6px; }
+  .sec h2 { font-size: 25px; }
+  .hero-in { padding: 36px 0 12px; gap: 32px; }
+  .hero-txt h1 { font-size: clamp(44px, 6.5vw, 86px); }
+  .titles .eyebrow { font-size: clamp(24px, 3.6vw, 42px); }
+  .hero-txt p { font-size: 18px; max-width: 640px; }
+  .hero-img img { max-height: 410px; }
+  .news { grid-template-columns: 330px 1fr; gap: 32px; }
+  .grid2 { gap: 32px 40px; }
+  #home-news-grid .thumb { width: 170px; height: 170px; }
+  #home-news-grid .item h4 { font-size: 18px; }
+  .portrait-card h3 { font-size: 22px; }
+  .cards { gap: 22px; }
+  .card h4 { font-size: 17px; }
+  .feat-grid { gap: 28px; }
+  .feat-grid .feat .ph-lg { height: 300px; }
+  .feat h4 { font-size: 20px; }
+  .item-s h4 { font-size: 16px; }
+  .thumb-s { width: 132px; height: 96px; }
 }
