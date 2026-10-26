@@ -113,18 +113,21 @@ export default function SettingsPage() {
           />
 
           <h3 style={{ marginTop: 20 }}>Thống kê truy cập (footer)</h3>
-          <label>Đang online</label>
-          <input
-            type="number"
-            value={stats.online}
-            onChange={(e) => setStats((s) => ({ ...s, online: e.target.value }))}
-          />
-          <label>Tổng số truy cập</label>
+          <p style={{ fontSize: 13, color: 'var(--grey)', lineHeight: 1.6 }}>
+            Số <b>Đang online</b> đang được đếm tự động (số người đang mở web
+            trong 5 phút gần nhất) — không cần nhập tay nữa.
+          </p>
+          <label>Tổng số truy cập khởi điểm</label>
           <input
             type="number"
             value={stats.total}
             onChange={(e) => setStats((s) => ({ ...s, total: e.target.value }))}
           />
+          <p style={{ fontSize: 13, color: 'var(--grey)', lineHeight: 1.6 }}>
+            Số hiển thị ngoài web = số khởi điểm này + số lượt đếm tự động
+            (mỗi người vào web tính 1 lượt; cùng 1 người lướt nhiều trang
+            trong 30 phút chỉ tính 1 lượt).
+          </p>
 
           <button className="btn-full" type="submit">
             Lưu cài đặt
