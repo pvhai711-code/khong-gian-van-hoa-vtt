@@ -1,10 +1,34 @@
 import Link from 'next/link';
+import { createClient } from '../lib/supabase/server';
+import { createAdminClient } from '../lib/supabase/admin';
 
 // Chân trang: cột logo + thông tin trường + liên hệ + thống kê truy cập.
 // Nội dung lấy từ bảng site_settings (Admin sửa được ở mục Cài đặt trang).
-export default function SiteFooter({ settings }) {
+// Riêng thống kê: Đang online = số phiên còn hoạt động trong 5 phút gần nhất,
+// Tổng = số khởi điểm thầy nhập trong Admin + số lượt đếm tự động. Nếu bảng
+// đếm chưa được tạo (chưa chạy SQL) thì hiện lại số thầy nhập tay như trước.
+async function getLiveStats() {
+  try {
+    const supabase = createAdminClient() || createClient();
+    const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+    const { count: online } = await supabase
+      .from('visitor_sessions')
+      .select('*', { count: 'exact', head: true })
+      .gt('last_seen', fiveMinAgo);
+    const { data } = await supabase.from('visitor_sessions').select('visits');
+    const visits = (data || []).reduce((s, r) => s + (r.visits || 0), 0);
+    return { online: online || 0, visits };
+  } catch {
+    return null;
+  }
+}
+
+export default async function SiteFooter({ settings }) {
   const school = settings?.school || {};
-  const stats = settings?.stats || { online: 189, total: 180801 };
+  const manual = settings?.stats || { online: 189, total: 180801 };
+  const live = await getLiveStats();
+  const online = live ? live.online : manual.online;
+  const total = (Number(manual.total) || 0) + (live ? live.visits : 0);
   const addr1 = (school.address_line1 || '').replace(/^Địa chỉ:\s*/i, '');
   const addr2 = school.address_line2 || '';
 
@@ -56,9 +80,9 @@ export default function SiteFooter({ settings }) {
           <div>
             <h4>Thống kê truy cập</h4>
             <p style={{ fontSize: 15, lineHeight: 2.05 }}>
-              Đang online: <b>{stats.online}</b>
+              Đang online: <b>{online}</b>
               <br />
-              Tổng số truy cập: <b>{Number(stats.total || 0).toLocaleString('vi-VN')}</b>
+              Tổng số truy cập: <b>{total.toLocaleString('vi-VN')}</b>
             </p>
             <p style={{ marginTop: 10 }}>
               <Link href="/">› Trang chủ</Link> &nbsp;&nbsp;
