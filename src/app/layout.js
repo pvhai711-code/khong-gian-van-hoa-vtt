@@ -5,6 +5,7 @@ import { getCategories, getSettings } from '../lib/data';
 import SiteHeader from '../components/SiteHeader';
 import SiteFooter from '../components/SiteFooter';
 import BackToTop from '../components/BackToTop';
+import VisitTracker from '../components/VisitTracker';
 
 // Luôn render động: dữ liệu (bài viết, cài đặt) lấy trực tiếp từ Supabase
 // ở mỗi lần truy cập nên trang chủ luôn mới và bản build không phụ thuộc
@@ -53,6 +54,7 @@ export default async function RootLayout({ children }) {
         {children}
         <SiteFooter settings={settings} />
         <BackToTop />
+        <VisitTracker />
       </body>
     </html>
   );
