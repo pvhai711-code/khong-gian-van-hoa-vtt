@@ -17,7 +17,7 @@ const MUSEUM_URL =
   'https://map3d.visithcmc.vn/?startscene=scene_bnr_view4';
 
 const FLIPBOOK_URL =
-  'https://heyzine.com/flip-book/437b823c6d.html#page/1';
+  'https://heyzine.com/flip-book/9873ef966f.html';
 
 function EmptyNote({ text }) {
   return (
