@@ -1,6 +1,6 @@
 // Mục SÁCH LẬT trên trang Tin tức: bấm vào ô là mở sách toàn màn hình
 // ngay trong tab mới (trang Heyzine), không qua khung xem giữa nữa.
-const FLIP_URL = 'https://heyzine.com/flip-book/437b823c6d.html#page/1';
+const FLIP_URL = 'https://heyzine.com/flip-book/9873ef966f.html';
 
 export default function FlipBookBox() {
   return (
